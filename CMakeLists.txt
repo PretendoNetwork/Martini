@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.1)
 set(CMAKE_TOOLCHAIN_FILE $ENV{DEVKITPRO}/wut/share/wut.toolchain.cmake)
 
-project(network-installer LANGUAGES C CXX)
+project(martini-juxt-patcher LANGUAGES C CXX)
 include("${WUT_ROOT}/share/wut.cmake" REQUIRED)
 
-add_executable(network-installer
+add_executable(martini-juxt-patcher
     main.cpp
     cert_patches/cert_backup_strategy.cpp
     cert_patches/cert_backup.cpp
@@ -21,25 +21,25 @@ add_executable(network-installer
     util/titles.cpp
     util/iosu_fs.cpp
 )
-wut_create_rpx(network-installer)
+wut_create_rpx(martini-juxt-patcher)
 
-set_property(TARGET network-installer PROPERTY CXX_STANDARD 20)
-target_compile_options(network-installer PRIVATE -Wall)
-target_include_directories(network-installer PRIVATE
+set_property(TARGET martini-juxt-patcher PROPERTY CXX_STANDARD 20)
+target_compile_options(martini-juxt-patcher PRIVATE -Wall)
+target_include_directories(martini-juxt-patcher PRIVATE
     .
 )
 
 add_subdirectory(ext/libbps)
 add_subdirectory(ext/libiosuhax)
 add_subdirectory(ext/wiiurpxlib)
-target_include_directories(network-installer PRIVATE ext/picosha2)
-target_include_directories(network-installer PRIVATE ext/zstr/src)
-target_link_libraries(network-installer PRIVATE libbps::libbps libiosuhax::libiosuhax wiiurpxlib::wiiurpxlib)
+target_include_directories(martini-juxt-patcher PRIVATE ext/picosha2)
+target_include_directories(martini-juxt-patcher PRIVATE ext/zstr/src)
+target_link_libraries(martini-juxt-patcher PRIVATE libbps::libbps libiosuhax::libiosuhax wiiurpxlib::wiiurpxlib)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(zlib REQUIRED IMPORTED_TARGET zlib)
 
-target_link_libraries(network-installer PRIVATE
+target_link_libraries(martini-juxt-patcher PRIVATE
     PkgConfig::zlib
 )
 
@@ -59,10 +59,10 @@ set_source_files_properties(
     GENERATED true
 )
 
-target_sources(network-installer PRIVATE
+target_sources(martini-juxt-patcher PRIVATE
     ext/resinfs/source/romfs.c
     app.romfs.o
 )
-target_include_directories(network-installer PRIVATE
+target_include_directories(martini-juxt-patcher PRIVATE
     ext/resinfs/include
 )
