@@ -54,7 +54,7 @@ void RenderMenuDone(MenuDoneError err) {
     }
 
     int support_code = static_cast<int>(err) + 100;
-    std::string support_code_msg = "Support code: " + std::to_string(support_code);
+    std::string support_code_msg = "Support code: MRTI-" + std::to_string(support_code);
 
     OSScreenPutFontEx(SCREEN_TV, 0, 20, message.c_str());
     if (error) {
