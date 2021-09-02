@@ -4,6 +4,8 @@ set(CMAKE_TOOLCHAIN_FILE $ENV{DEVKITPRO}/wut/share/wut.toolchain.cmake)
 project(martini-juxt-patcher LANGUAGES C CXX)
 include("${WUT_ROOT}/share/wut.cmake" REQUIRED)
 
+option(RELEASE_BUILD  "Create a release-branded build"  OFF)
+
 add_executable(martini-juxt-patcher
     main.cpp
     cert_patches/cert_backup_strategy.cpp
@@ -28,6 +30,10 @@ target_compile_options(martini-juxt-patcher PRIVATE -Wall)
 target_include_directories(martini-juxt-patcher PRIVATE
     .
 )
+
+if (RELEASE_BUILD)
+  target_compile_definitions(martini-juxt-patcher PRIVATE RELEASE_BUILD)
+endif()
 
 add_subdirectory(ext/libbps)
 add_subdirectory(ext/libiosuhax)

@@ -14,6 +14,7 @@
 #include "util/util.hpp"
 #include "util/titles.hpp"
 #include "util/iosu_fs.hpp"
+#include "version.h"
 
 #include <cstdio>
 #include <array>
@@ -55,7 +56,7 @@ int main(int argc, char** argv) {
     }
     OnLeavingScope _mnu_c([&] { QuitMenu(); });
 
-    printf("Pretendo Network Installer indev\n");
+    printf(APP_NAME " " APP_VERSION "\n");
 
     RenderMenuLoading(task_percent(task++), "Finding Miiverse title...");
     PresentMenu();
