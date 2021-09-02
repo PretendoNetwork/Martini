@@ -1,4 +1,5 @@
 #include "menu/menu.hpp"
+#include "version.h"
 
 #include <coreinit/screen.h>
 #include <coreinit/cache.h>
@@ -103,6 +104,7 @@ void RenderMenuBasic() {
     for (int x = 0; x < 1280; x++) {
         tv_pixels[x + line2_720p_y*1280] = menu_colour_palette.text_colour;
     }
+    OSScreenPutFontEx(SCREEN_TV, -3, -1, APP_NAME " " APP_VERSION);
 
     OSScreenClearBufferEx(SCREEN_DRC, menu_colour_palette.background_colour);
     uint32_t* drc_pixels = GetMenuBuf(SCREEN_DRC);
@@ -113,6 +115,7 @@ void RenderMenuBasic() {
     for (int x = 0; x < 854; x++) {
         drc_pixels[x + line2_480p_y*896] = menu_colour_palette.text_colour;
     }
+    OSScreenPutFontEx(SCREEN_DRC, -3, -1, APP_NAME " " APP_VERSION);
 }
 
 void PresentMenu() {
