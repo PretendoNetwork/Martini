@@ -53,12 +53,16 @@ void RenderMenuDone(MenuDoneError err) {
             break;
     }
 
+    int support_code = static_cast<int>(err) + 100;
+    std::string support_code_msg = "Support code: " + std::to_string(support_code);
+
     OSScreenPutFontEx(SCREEN_TV, 0, 20, message.c_str());
     if (error) {
         OSScreenPutFontEx(SCREEN_TV, 0, 22, "See pretendo.network/faq for details.");
     } else {
         OSScreenPutFontEx(SCREEN_TV, 0, 22, "Please reboot your console.");
     }
+    OSScreenPutFontEx(SCREEN_TV, 0, 23, support_code_msg.c_str());
     OSScreenPutFontEx(SCREEN_TV, 0, 26, "HOME: Quit");
 
     OSScreenPutFontEx(SCREEN_DRC, 0, 10, message.c_str());
@@ -67,5 +71,6 @@ void RenderMenuDone(MenuDoneError err) {
     } else {
         OSScreenPutFontEx(SCREEN_DRC, 0, 11, "Please reboot your console.");
     }
+    OSScreenPutFontEx(SCREEN_DRC, 0, 12, support_code_msg.c_str());
     OSScreenPutFontEx(SCREEN_DRC, 0, 17, "HOME: Quit");
 }
