@@ -31,6 +31,11 @@
 
 #include <romfs-wiiu.h>
 
+extern "C" {
+    //remove when wut adds it
+    void OSShutdown();
+}
+
 static constexpr int task_percent(int task) { return (task*100)/18; };
 
 int main(int argc, char** argv) {
@@ -358,10 +363,23 @@ int main(int argc, char** argv) {
         }
     }
 
-    //todo: flush volume on supported CFWs
 
     //woo!
-    while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_NO_ERROR); PresentMenu(); }
+    while (true) {
+        VPADStatus vpad;
+        VPADReadError error;
+        VPADRead(VPAD_CHAN_0, &vpad, 1, &error);
+        if (error == VPAD_READ_SUCCESS) {
+            if (vpad.trigger & VPAD_BUTTON_A) break;
+        }
+        RenderMenuDone(MENU_DONE_NO_ERROR);
+        PresentMenu();
+    }
+
+    printf("shutting down\n");
+
+    OSShutdown();
+    while (WHBProcIsRunning()) {}
 
     return 0;
 }

@@ -63,7 +63,11 @@ void RenderMenuDone(MenuDoneError err) {
         OSScreenPutFontEx(SCREEN_TV, 0, 22, "Please reboot your console.");
     }
     OSScreenPutFontEx(SCREEN_TV, 0, 23, support_code_msg.c_str());
-    OSScreenPutFontEx(SCREEN_TV, 0, 26, "HOME: Quit");
+    if (error) {
+        OSScreenPutFontEx(SCREEN_TV, 0, 26, "HOME: Quit");
+    } else {
+        OSScreenPutFontEx(SCREEN_TV, 0, 26, "A: Shut Down");
+    }
 
     OSScreenPutFontEx(SCREEN_DRC, 0, 10, message.c_str());
     if (error) {
@@ -72,5 +76,9 @@ void RenderMenuDone(MenuDoneError err) {
         OSScreenPutFontEx(SCREEN_DRC, 0, 11, "Please reboot your console.");
     }
     OSScreenPutFontEx(SCREEN_DRC, 0, 12, support_code_msg.c_str());
-    OSScreenPutFontEx(SCREEN_DRC, 0, 17, "HOME: Quit");
+    if (error) {
+        OSScreenPutFontEx(SCREEN_DRC, 0, 17, "HOME: Quit");
+    } else {
+        OSScreenPutFontEx(SCREEN_DRC, 0, 17, "A: Shut Down");
+    }
 }
