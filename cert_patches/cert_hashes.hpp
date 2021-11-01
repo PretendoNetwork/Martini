@@ -11,10 +11,11 @@ enum Cert_ID {
     //pretendo replacements
     CERT_ID_ISRG_ROOT_X1,
     CERT_ID_DST_ROOT_X3,
+    CERT_ID_PKCA_Z_ROOT,
 };
 const char* cert_id_name(Cert_ID id);
 
-#define CURRENT_PRETENDO_CERT CERT_ID_DST_ROOT_X3
+#define CURRENT_PRETENDO_CERT CERT_ID_PKCA_Z_ROOT
 #define CURRENT_SACRIFICIAL_CERT CERT_ID_THWATE_PREMIUM_SERVER
 
 enum Cert_PatchState {

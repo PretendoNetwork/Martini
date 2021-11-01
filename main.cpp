@@ -112,7 +112,7 @@ int main(int argc, char** argv) {
 
     std::filesystem::path cert_path = "iosu:/vol/storage_mlc01/sys/title/0005001b/10054000/content/scerts/THAWTE_PREMIUM_SERVER_CA.der";
     std::filesystem::path cert_bak_path = "iosu:/vol/storage_mlc01/sys/title/0005001b/10054000/content/scerts/THAWTE_PREMIUM_SERVER_CA.der.orig";
-    std::filesystem::path cert_patched_path = "resin:/dstrootx3.der";
+    std::filesystem::path cert_patched_path = "resin:/pkcazroot.der";
 
     std::error_code fserr;
 

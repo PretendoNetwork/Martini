@@ -36,6 +36,10 @@ const static std::map<sha256, Cert_State> cert_hashes = {
         .id = CERT_ID_DST_ROOT_X3,
         .patch = CERT_PATCH_STATE_PRETENDO,
     }},
+    {"4c30bf140963ec0ca48f76e9f87ec8943739d1ea55350a2970713b632a984936"_sha, {
+        .id = CERT_ID_PKCA_Z_ROOT,
+        .patch = CERT_PATCH_STATE_PRETENDO,
+    }}
 };
 
 Cert_State cert_hash(std::ifstream& is) {
@@ -64,6 +68,7 @@ const char* cert_id_name(Cert_ID id) {
         ENUM_NAME(CERT_ID_THWATE_PREMIUM_SERVER);
         ENUM_NAME(CERT_ID_ISRG_ROOT_X1);
         ENUM_NAME(CERT_ID_DST_ROOT_X3);
+        ENUM_NAME(CERT_ID_PKCA_Z_ROOT);
     }
     return "bug: unknown";
 }
