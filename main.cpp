@@ -34,9 +34,13 @@
 extern "C" {
     //remove when wut adds it
     void OSShutdown();
+    void FSAInit();
+    int FSAAddClient(void* asyncAttachData);
+    int FSAFlushVolume(int handle, const char* path);
+    int FSADelClient(int handle);
 }
 
-static constexpr int task_percent(int task) { return (task*100)/18; };
+static constexpr int task_percent(int task) { return (task*100)/19; };
 
 int main(int argc, char** argv) {
     int ret;
@@ -52,6 +56,16 @@ int main(int argc, char** argv) {
         //WHBLogConsoleFree();
         ramfsExit();
         LOGShutdown();
+    });
+
+    FSAInit();
+    int fsaHandle = FSAAddClient(NULL);
+    printf("FSA handle: %08x\n", fsaHandle);
+    OnLeavingScope _fsa_c([&] {
+        if (!(fsaHandle < 0)) {
+            FSADelClient(fsaHandle);
+            fsaHandle = 0;
+        }
     });
 
     bret = InitMenu();
@@ -363,6 +377,11 @@ int main(int argc, char** argv) {
         }
     }
 
+    RenderMenuLoading(task_percent(task++), "Flushing volumes...");
+    PresentMenu();
+
+    ret = FSAFlushVolume(fsaHandle, "/vol/storage_mlc01");
+    printf("FSAFlushVolume: %08x\n", ret);
 
     //woo!
     while (true) {
