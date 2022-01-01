@@ -11,3 +11,4 @@ martini-juxt-patcher
 martini-juxt-patcher.rpx
 app.romfs.o
 .vscode/settings.json
+MakeFile
