@@ -172,12 +172,14 @@ int main(int argc, char** argv) {
     BackupStrategy cert_strategy = *cert_strategy_o;
 
     bool proc = true;
+    bool IsPatching;
     while ((proc = WHBProcIsRunning())) {
         VPADStatus vpad;
         VPADReadError error;
         VPADRead(VPAD_CHAN_0, &vpad, 1, &error);
         if (error == VPAD_READ_SUCCESS) {
-            if (vpad.trigger & VPAD_BUTTON_A) break;
+            if (vpad.trigger & VPAD_BUTTON_A){ IsPatching = true; break;}
+            else if (vpad.trigger & VPAD_BUTTON_Y){ IsPatching = false; break;}
         }
         RenderMenuMiiverseConfirm(wave_state);
         PresentMenu();
@@ -188,8 +190,8 @@ int main(int argc, char** argv) {
         return 0;
     }
     //otherwise we can continue
-
-    bool error = false;
+    //check if user wants to patch or restore
+    if (IsPatching){
 
     RenderMenuLoading(task_percent(task++), "Creating Miiverse backup... (wave.rpx)");
     PresentMenu();
@@ -376,13 +378,12 @@ int main(int argc, char** argv) {
             return -1;
         }
     }
-
+    //Flush Volumes
     RenderMenuLoading(task_percent(task++), "Flushing volumes...");
     PresentMenu();
 
     ret = FSAFlushVolume(fsaHandle, "/vol/storage_mlc01");
     printf("FSAFlushVolume: %08x\n", ret);
-
     //woo!
     while (true) {
         VPADStatus vpad;
@@ -401,4 +402,158 @@ int main(int argc, char** argv) {
     while (WHBProcIsRunning()) {}
 
     return 0;
+}
+else {
+    //User wants to Restore to Stock
+    //Check if Backup Exists
+    RenderMenuLoading(task_percent(task++), "Checking for Backup... (wave.rpx)");
+    PresentMenu();
+    if (!wave_state.backup_exists) {
+        //No Backup
+    printf("Failed - No Backup Exists\n");
+            while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_NO_BACKUP); PresentMenu(); }
+            return -1;
+    }
+    RenderMenuLoading(task_percent(task++), "Checking for Backup... (nn_olv.rpl)");
+    PresentMenu();
+     std::ifstream is(nn_olv_path, std::ios::binary);
+        auto hash = rpx_hash(is);
+    if (hash.id == CURRENT_PRETENDO_NN_OLV || !hash.patch) {
+        //No Backup
+    printf("Failed - No Backup Exists\n");
+            while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_NO_BACKUP); PresentMenu(); }
+            return -1;
+    }
+    RenderMenuLoading(task_percent(task++), "Checking for Backup... (NSSL cert)");
+    PresentMenu();
+    std::ifstream is2(cert_bak_path, std::ios::binary);
+     auto hash2 = cert_hash(is2);
+     if (hash2.patch != CERT_PATCH_STATE_STOCK) {
+        //No Backup
+    printf("Failed - No Backup Exists\n");
+            while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_NO_BACKUP); PresentMenu(); }
+            return -1;
+    }
+
+    //Restore Backup
+RenderMenuLoading(task_percent(task++), "Restoring Miiverse backup... (wave.rpx)");
+    PresentMenu();
+
+    bret = backup_rpx(B_RESTORE_BACKUP, wave_path, wave_bak_path);
+    if (!bret) {
+        printf("Failed to restore wave!\n");
+        wave_strategy.patch_action = P_DO_NOTHING;
+        while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_RESTORE_FAIL); PresentMenu(); }
+        return -1;
+    }
+    RenderMenuLoading(task_percent(task++), "Restoring Miiverse backup... (nn_olv.rpl)");
+    PresentMenu();
+
+    bret = backup_rpx(B_RESTORE_BACKUP, pn_olv_path, nn_olv_path);
+    if (!bret) {
+        printf("Failed to restore olv!\n");
+        olv_strategy.patch_action = P_DO_NOTHING;
+        while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_RESTORE_FAIL); PresentMenu(); }
+        return -1;
+    }
+    RenderMenuLoading(task_percent(task++), "Restoring Miiverse backup... (NSSL cert)");
+    PresentMenu();
+
+    bret = backup_cert(B_RESTORE_BACKUP, cert_path, cert_bak_path);
+    if (!bret) {
+        printf("Failed to restore cert!\n");
+        cert_strategy.patch_action = P_DO_NOTHING;
+        while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_BACKUP_FAIL); PresentMenu(); }
+        return -1;
+    }
+ RenderMenuLoading(task_percent(task++), "Verifying final patches... (wave.rpx)");
+    PresentMenu();
+
+    {
+        std::ifstream is(wave_path, std::ios::binary);
+        auto hash = rpx_hash(is);
+        if (hash.patch != RPX_PATCH_STATE_STOCK) {
+            printf("Failed to commit patches - stock wave in place\n");
+            while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_RESTORE_FAIL); PresentMenu(); }
+            return -1;
+        } else if (hash.id == CURRENT_PRETENDO_WAVE) {
+            printf("Failed to commit patches - Pretendo wave in place\n");
+            while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_RESTORE_FAIL); PresentMenu(); }
+            return -1;
+        }
+    }
+    RenderMenuLoading(task_percent(task++), "Verifying final patches... (nn_olv.rpl)");
+    PresentMenu();
+
+    {
+        std::ifstream is(nn_olv_path, std::ios::binary);
+        auto hash = rpx_hash(is);
+        if (hash.id == CURRENT_PRETENDO_NN_OLV) {
+            //we've still have the PN OLV
+            printf("Failed to commit patches - nn_olv corrupt!\n");
+            while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_RESTORE_FAIL); PresentMenu(); }
+            return -1;
+        }
+    }
+   RenderMenuLoading(task_percent(task++), "Verifying final patches... (NSSL cert)");
+    PresentMenu();
+
+    {
+        std::ifstream is(cert_path, std::ios::binary);
+        auto hash = cert_hash(is);
+        if (hash.id != CERT_ID_THWATE_PREMIUM_SERVER) {
+            //we've already modified wave, so this is always dangerous
+            printf("Failed to commit patches - nssl cert corrupt!\n");
+            //oh shit, this could brick - restore backup
+            bret = fast_copy_file(cert_bak_path, cert_path);
+            if (!bret) {
+                printf("Reverting nssl patches failed!\n");
+                while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_PATCH_FAIL_CERT_BRICK); PresentMenu(); }
+                return -1;
+            }
+
+            std::ifstream is2(cert_path, std::ios::binary);
+            auto hash2 = cert_hash(is2);
+            if (hash2.patch != CERT_PATCH_STATE_STOCK) {
+                printf("Reverting nssl patches failed!\n");
+                while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_PATCH_FAIL_CERT_BRICK); PresentMenu(); }
+                return -1;
+            } else if (hash2.id != CURRENT_SACRIFICIAL_CERT) {
+                printf("Reverting NSSL cert resulted in the wrong cert?\n");
+                while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_PATCH_FAIL_DANGEROUS); PresentMenu(); }
+                return -1;
+            }
+
+            while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_PATCH_FAIL_DANGEROUS); PresentMenu(); }
+            return -1;
+        }
+        
+    }
+    //Flush Volumes
+    RenderMenuLoading(task_percent(19), "Flushing volumes...");
+    PresentMenu();
+
+    ret = FSAFlushVolume(fsaHandle, "/vol/storage_mlc01");
+    printf("FSAFlushVolume: %08x\n", ret);
+    //woo!
+    while (true) {
+        VPADStatus vpad;
+        VPADReadError error;
+        VPADRead(VPAD_CHAN_0, &vpad, 1, &error);
+        if (error == VPAD_READ_SUCCESS) {
+            if (vpad.trigger & VPAD_BUTTON_A) break;
+        }
+        RenderMenuDone(MENU_DONE_RESTORE_DONE);
+        PresentMenu();
+    }
+
+    printf("shutting down\n");
+
+    OSShutdown();
+    while (WHBProcIsRunning()) {}
+
+    return 0;
+}
+    
+
 }

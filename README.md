@@ -31,9 +31,9 @@ While the modifications of system titles on NAND is regrettable, at the time of 
 ## Safety
 Martini is extremely paranoid about the safety of your console, with hash checks upon hash checks for each stage of each file's patching, only writing to sensitive locations on NAND once it is completely satisfied with the result. Unfortunately, code does still have bugs, and despite our best efforts this patching approach does bring some level of risk.
 
-While writing to the Miiverse applet appears to be safe, with the worst situation being a Miiverse applet that fails to open, Martini also writes to the system CA certificate folder. If done improperly, this **can brick a console** by causing the Wii U Menu to freeze. Martini will attempt to detect and recover from this condition, but if it fails, **the only known way to recover is with CBHC**. For this reason, it is strongly recommended that any non-technical users of this patcher have CBHC installed on their console. The Aroma beta should also allow for recovery from this type of softbrick, though no cases have been recorded yet.
+While writing to the Miiverse applet appears to be safe, with the worst situation being a Miiverse applet that fails to open, Martini also writes to the system CA certificate folder. If done improperly, this **can brick a console** by causing the Wii U Menu to freeze. Martini will attempt to detect and recover from this condition, but if it fails, **it can be recovered either by using a ColdBoot CFW (CBHC,Aroma,Tiramisu) or by using BluuBomb.**
 
-As of September 2021, no consoles are known to have been bricked by using Martini in its default configuration.
+As of January 2022, no consoles are known to have been bricked by using Martini in its default configuration.
 
 ## TODO
 See [Issues](https://github.com/PretendoNetwork/Martini/issues).

@@ -48,17 +48,24 @@ void RenderMenuDone(MenuDoneError err) {
         case MENU_DONE_PATCH_FAIL_CERT_BRICK:
             message = "Failed to replace a cert. This could brick - seek help on our Discord immediately.";
             break;
+         case MENU_DONE_RESTORE_DONE:
+            message = "Juxtaposition has been uninstalled successfully.";
+            error = false;
+            break; 
+         case MENU_DONE_RESTORE_FAIL:
+            message = "Failed to restore Miiverse.";
+            break;   
         default:
             message = "An unknown error occured.";
             break;
     }
 
-    int support_code = static_cast<int>(err) + 100;
-    std::string support_code_msg = "Support code: MRTI-" + std::to_string(support_code);
+    int support_code = static_cast<int>(err) + 1000;
+    std::string support_code_msg = "Support code: 678-" + std::to_string(support_code); //Used to be MRTI-1XX But changed to make it easier for the error command in Yamamura which uses the wiiu Error Template
 
     OSScreenPutFontEx(SCREEN_TV, 0, 20, message.c_str());
     if (error) {
-        OSScreenPutFontEx(SCREEN_TV, 0, 22, "See pretendo.network/faq for details.");
+        OSScreenPutFontEx(SCREEN_TV, 0, 22, "An Error has occured please join the discord and tell us the issue with the Error Code.");
     } else {
         OSScreenPutFontEx(SCREEN_TV, 0, 22, "Please reboot your console.");
     }
@@ -71,7 +78,7 @@ void RenderMenuDone(MenuDoneError err) {
 
     OSScreenPutFontEx(SCREEN_DRC, 0, 10, message.c_str());
     if (error) {
-        OSScreenPutFontEx(SCREEN_DRC, 0, 11, "See pretendo.network/faq for details.");
+        OSScreenPutFontEx(SCREEN_DRC, 0, 11, "An Error has occured please join the discord and tell us the issue with the Error Code.");
     } else {
         OSScreenPutFontEx(SCREEN_DRC, 0, 11, "Please reboot your console.");
     }

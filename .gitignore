@@ -1,1 +1,13 @@
 build/
+.vscode/c_cpp_properties.json
+CMakeCache.txt
+cmake_install.cmake
+*.cmake
+CMakeFiles/
+ext/
+ext/wiiurpxlib
+ext/libiosuhax
+martini-juxt-patcher
+martini-juxt-patcher.rpx
+app.romfs.o
+.vscode/settings.json
