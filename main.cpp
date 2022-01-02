@@ -467,10 +467,6 @@ else {
             printf("Failed to commit patches - It may be Corrupted\n");
             while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_RESTORE_FAIL); PresentMenu(); }
             return -1;
-        } else if (hash.id == CURRENT_PRETENDO_WAVE) {
-            printf("Failed to commit patches - Pretendo wave in place\n");
-            while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_RESTORE_FAIL); PresentMenu(); }
-            return -1;
         }
     }
     RenderMenuLoading(task_percent(task++,7), "Verifying final patches... (nn_olv.rpl)");
