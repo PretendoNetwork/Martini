@@ -409,11 +409,11 @@ else {
     //Check if Backup Exists
     RenderMenuLoading(task_percent(task++,7), "Checking for Backup... (wave.rpx)");
     PresentMenu();
-    std::ifstream is(cert_bak_path, std::ios::binary);
+    std::ifstream is(wave_bak_path, std::ios::binary);
      auto hash = rpx_hash(is);
     if (!wave_state.backup_exists || hash.patch != RPX_PATCH_STATE_STOCK) {
-        //No Backup
-    printf("Failed - No Backup Exists\n");
+        //No Backup for wave.rpx or corrupt
+    printf("Failed - No Backup Exists (wave.rpx)\n");
             while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_NO_BACKUP); PresentMenu(); }
             return -1;
     }
@@ -422,9 +422,9 @@ else {
     PresentMenu();
     std::ifstream is2(cert_bak_path, std::ios::binary);
      auto hash2 = cert_hash(is2);
-     if (hash2.patch != CERT_PATCH_STATE_STOCK) {
-        //No Backup
-    printf("Failed - No Backup Exists\n");
+     if (hash2.patch != CERT_PATCH_STATE_STOCK || hash2.id != CERT_ID_THWATE_PREMIUM_SERVER) {
+        //No Backup for NSSL or corrupt
+    printf("Failed - No Backup Exists (NSSL cert)\n");
             while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_NO_BACKUP); PresentMenu(); }
             return -1;
     }
@@ -464,7 +464,7 @@ else {
         std::ifstream is(wave_path, std::ios::binary);
         auto hash = rpx_hash(is);
         if (hash.patch != RPX_PATCH_STATE_STOCK) {
-            printf("Failed to commit patches - Pretendo wave in place\n");
+            printf("Failed to commit patches - It may be Corrupted\n");
             while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_RESTORE_FAIL); PresentMenu(); }
             return -1;
         } else if (hash.id == CURRENT_PRETENDO_WAVE) {
@@ -480,7 +480,7 @@ else {
         std::ifstream is(nn_olv_path, std::ios::binary);
         auto hash = rpx_hash(is);
         if (hash.patch != RPX_PATCH_STATE_STOCK) {
-            //we've still have the PN OLV
+            //Just checking if it is not damaged
             printf("Failed to commit patches - nn_olv corrupt!\n");
             while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_RESTORE_FAIL); PresentMenu(); }
             return -1;
