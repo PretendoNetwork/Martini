@@ -52,7 +52,7 @@ void RenderMenuMiiverseConfirm(const BackupState& state) {
 
     OSScreenPutFontEx(SCREEN_TV, 0, 26, "HOME: Cancel");
     OSScreenPutFontEx(SCREEN_TV, 80, 26, "A: Apply Patches");
-    OSScreenPutFontEx(SCREEN_TV, 60, 26, "Y: Restore Patches");
+    OSScreenPutFontEx(SCREEN_TV, 60, 26, "Y: Uninstall Patches");
     OSScreenPutFontEx(SCREEN_DRC, 0,  9, "Please review the state of the installed Miiverse applet:");
     OSScreenPutFontEx(SCREEN_DRC, 0, 10, main_text.c_str());
     OSScreenPutFontEx(SCREEN_DRC, 0, 11, back_text.c_str());
@@ -77,5 +77,5 @@ void RenderMenuMiiverseConfirm(const BackupState& state) {
 
     OSScreenPutFontEx(SCREEN_DRC, 0, 17, "HOME: Cancel");
     OSScreenPutFontEx(SCREEN_DRC, 46, 17, "A: Apply Patches");
-    OSScreenPutFontEx(SCREEN_DRC, 25, 17, "Y: Restore Patches");
+    OSScreenPutFontEx(SCREEN_DRC, 25, 17, "Y: Uninstall Patches");
 }
