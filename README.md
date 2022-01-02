@@ -1,6 +1,6 @@
 # Martini - Miiverse applet patcher
 
-[![Pretendo network logo](https://camo.githubusercontent.com/b98196c2347796d66fa669e8510749665ec80ba0/68747470733a2f2f692e696d6775722e636f6d2f5839346237574b2e706e67)](https://pretendo.network)
+[![Pretendo network logo](https://github.com/PretendoNetwork/website/raw/master/public/assets/images/opengraph/opengraph-image.png)](https://pretendo.network)
 
 Martini lets you patch a Wii U's Miiverse/wave applet to use [Juxtaposition](https://github.com/PretendoNetwork/juxt-web), Pretendo's replacement social networking service. Note that the modifications Martini makes are "permanent" - they can be reverted, but unlike our other patches, they write to a console's NAND and persist across reboots.
 
@@ -31,7 +31,7 @@ While the modifications of system titles on NAND is regrettable, at the time of 
 ## Safety
 Martini is extremely paranoid about the safety of your console, with hash checks upon hash checks for each stage of each file's patching, only writing to sensitive locations on NAND once it is completely satisfied with the result. Unfortunately, code does still have bugs, and despite our best efforts this patching approach does bring some level of risk.
 
-While writing to the Miiverse applet appears to be safe, with the worst situation being a Miiverse applet that fails to open, Martini also writes to the system CA certificate folder. If done improperly, this **can brick a console** by causing the Wii U Menu to freeze. Martini will attempt to detect and recover from this condition, but if it fails, **it can be recovered either by using a ColdBoot CFW (CBHC,Aroma,Tiramisu) or by using BluuBomb.**
+While writing to the Miiverse applet appears to be safe, with the worst situation being a Miiverse applet that fails to open, Martini also writes to the system CA certificate folder. If done improperly, this **can brick a console** by causing the Wii U Menu to freeze. Martini will attempt to detect and recover from this condition, but if it fails, **it can be recovered either by using a ColdBoot CFW (CBHC, Aroma, Tiramisu) or by using BluuBomb.**
 
 As of January 2022, no consoles are known to have been bricked by using Martini in its default configuration.
 
