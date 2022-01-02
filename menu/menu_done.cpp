@@ -60,8 +60,8 @@ void RenderMenuDone(MenuDoneError err) {
             break;
     }
 
-    int support_code = static_cast<int>(err) + 1000;
-    std::string support_code_msg = "Support code: 678-" + std::to_string(support_code); //Used to be MRTI-1XX But changed to make it easier for the error command in Yamamura which uses the wiiu Error Template
+    int support_code = static_cast<int>(err) + 100;
+    std::string support_code_msg = "Support code: MRTI-" + std::to_string(support_code);
 
     OSScreenPutFontEx(SCREEN_TV, 0, 20, message.c_str());
     if (error) {
