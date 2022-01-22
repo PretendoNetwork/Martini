@@ -1,6 +1,2 @@
 build/
 .vscode/
-martini-juxt-patcher
-martini-juxt-patcher.rpx
-MakeFile
-CMakeFiles/
