@@ -27,4 +27,11 @@ Then CMake
 mkdir build && cd build && cmake .. && make
 ```
 When now recompiling just run `make` (in the build folder)
-   
+
+
+## Troubleshoot
+
+Missing SubModules:
+```sh
+git submodule update --init
+```
