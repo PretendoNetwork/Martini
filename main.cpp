@@ -173,15 +173,26 @@ int main(int argc, char** argv) {
 
     bool proc = true;
     bool IsPatching;
+    bool AllowUninstalling = false;
+
+    //Checks if a healthy backup to see if it can unintstall
+
+    std::ifstream isc(wave_bak_path, std::ios::binary);
+     auto hash = rpx_hash(isc);
+    if (wave_state.backup_exists && hash.patch == RPX_PATCH_STATE_STOCK) {
+        AllowUninstalling = true;
+    }
+
     while ((proc = WHBProcIsRunning())) {
         VPADStatus vpad;
         VPADReadError error;
         VPADRead(VPAD_CHAN_0, &vpad, 1, &error);
         if (error == VPAD_READ_SUCCESS) {
             if (vpad.trigger & VPAD_BUTTON_A){ IsPatching = true; break;}
-            else if (vpad.trigger & VPAD_BUTTON_Y){ IsPatching = false; break;}
+            else if (vpad.trigger & VPAD_BUTTON_Y && AllowUninstalling){ IsPatching = false; break;}
         }
         RenderMenuMiiverseConfirm(wave_state);
+        if (AllowUninstalling){RenderUninstallText();}
         PresentMenu();
     }
 
