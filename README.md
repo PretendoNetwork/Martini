@@ -10,13 +10,8 @@ The recommended configuration for Martini is a console with CBHC.
 
 Mocha CFW or a compatible `/dev/iosuhax` CFW is required at installation time - notably CBHC's HaxchiFW does *not* meet this requirement, though CBHC can be configured to boot Mocha. After patching is complete, any CFW with signature patching should allow the Juxt applet to run - though CBHC is strongly recommended for brick protection, see [Safety](#Safety) below.
 
-### Build Dependencies
-
- - [**wut**](https://github.com/devkitPro/wut/)
- - **devkitPPC**
- - **ppc-zlib** - available from devkitPro pacman
-
-We suggest using Docker to compile.
+## Building
+See BUILD.md
 
 ## Patch strategy
 The current version of Martini will:
@@ -34,6 +29,7 @@ Martini is extremely paranoid about the safety of your console, with hash checks
 While writing to the Miiverse applet appears to be safe, with the worst situation being a Miiverse applet that fails to open, Martini also writes to the system CA certificate folder. If done improperly, this **can brick a console** by causing the Wii U Menu to freeze. Martini will attempt to detect and recover from this condition, but if it fails, **it can be recovered either by using a ColdBoot CFW (CBHC, Aroma, Tiramisu) or by using BluuBomb.**
 
 As of January 2022, no consoles are known to have been bricked by using Martini in its default configuration.
+
 
 ## TODO
 See [Issues](https://github.com/PretendoNetwork/Martini/issues).
