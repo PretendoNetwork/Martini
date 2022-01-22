@@ -24,7 +24,7 @@ export DEVKITPPC=/opt/devkitpro/devkitPPC
 
 Then CMake
 ```sh
-mkdir build && cmake --build build && cd build && make
+mkdir build && cd build && cmake .. && make
 ```
 When now recompiling just run `make` (in the build folder)
    
