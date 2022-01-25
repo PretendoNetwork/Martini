@@ -13,6 +13,8 @@ enum MenuDoneError {
     MENU_DONE_PATCH_BAD = 9,
     MENU_DONE_PATCH_FAIL_DANGEROUS = 10,
     MENU_DONE_PATCH_FAIL_CERT_BRICK = 11,
+    MENU_DONE_RESTORE_DONE = 12,
+    MENU_DONE_RESTORE_FAIL = 13,
 };
 
 void RenderMenuDone(MenuDoneError err);

@@ -3,7 +3,7 @@
 #define APP_NAME "Martini"
 
 #ifdef RELEASE_BUILD
-#define APP_VERSION "v0.3"
+#define APP_VERSION "v0.4"
 #else
-#define APP_VERSION "v0.4-indev"
+#define APP_VERSION "v0.5-indev"
 #endif
