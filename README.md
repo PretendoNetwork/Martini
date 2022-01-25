@@ -11,7 +11,7 @@ The recommended configuration for Martini is a console with CBHC.
 Mocha CFW or a compatible `/dev/iosuhax` CFW is required at installation time - notably CBHC's HaxchiFW does *not* meet this requirement, though CBHC can be configured to boot Mocha. After patching is complete, any CFW with signature patching should allow the Juxt applet to run - though CBHC is strongly recommended for brick protection, see [Safety](#Safety) below.
 
 ## Building
-See BUILD.md
+See [BUILD.md](/BUILD.md)
 
 ## Patch strategy
 The current version of Martini will:
