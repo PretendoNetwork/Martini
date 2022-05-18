@@ -46,7 +46,7 @@ void RenderMenuDone(MenuDoneError err) {
             message = "Failed to apply a patch. Your system has been modified and may be in an unstable state.";
             break;
         case MENU_DONE_PATCH_FAIL_CERT_BRICK:
-            message = "Failed to replace a cert. This could brick - seek help on our Discord immediately.";
+            message = "Failed to replace a cert. This could brick your Wii U console - seek help on our Discord immediately.";
             break;
         default:
             message = "An unknown error occured.";
