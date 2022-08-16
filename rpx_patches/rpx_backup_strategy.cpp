@@ -40,11 +40,11 @@ BackupState GetBackupStrategy(
                     .patch_action = P_PATCH_FROM_REAL,
                 };
             } else if (result.main_state.patch == RPX_PATCH_STATE_PRETENDO) {
-                //real wave is pretendo - we are likely "updating"
-                //get confirmation, load backup, patch, overwrite real
+                //real wave is pretendo - we are likely "updating" or uninstalling
+                //load backup, patch, overwrite real
                 //TODO confirmation may not be needed here
                 result.strategy = {
-                    .need_confirmation = true,
+                    .need_confirmation = false,
                     .backup_action = B_DO_NOTHING,
                     .patch_action = P_PATCH_FROM_BACKUP,
                 };
