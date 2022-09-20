@@ -1,0 +1,20 @@
+name: martini-CI
+
+on: push
+
+jobs:
+    build-martini:
+        runs-on: ubuntu-22.04
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  submodules: recursive
+            - name: build toolchain container
+              run: docker build . -t builder
+            - uses: ammaraskar/gcc-problem-matcher@master
+            - name: build ntrview
+              run: docker run --rm -v ${PWD}:/app -w /app builder
+            - uses: actions/upload-artifact@master
+              with:
+                  name: martini
+                  path: "build/*.rpx"
