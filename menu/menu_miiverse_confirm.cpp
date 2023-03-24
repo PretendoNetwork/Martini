@@ -78,6 +78,6 @@ void RenderMenuMiiverseConfirm(const BackupState& state) {
     OSScreenPutFontEx(SCREEN_DRC, 46, 17, "A: Apply Patches");
 }
 void RenderUninstallText(){
-    OSScreenPutFontEx(SCREEN_TV, 60, 26, "Y: Uninstall Patches");
+    OSScreenPutFontEx(SCREEN_TV, 59, 26, "Y: Uninstall Patches");
     OSScreenPutFontEx(SCREEN_DRC, 25, 17, "Y: Uninstall Patches");
 }
