@@ -73,7 +73,7 @@ void RenderMenuDone(MenuDoneError err) {
     if (error) {
         OSScreenPutFontEx(SCREEN_TV, 0, 26, "HOME: Quit");
     } else {
-        OSScreenPutFontEx(SCREEN_TV, 0, 26, "A: Shut Down");
+        OSScreenPutFontEx(SCREEN_TV, 0, 26, "A: Reboot");
     }
 
     OSScreenPutFontEx(SCREEN_DRC, 0, 10, message.c_str());
@@ -86,6 +86,6 @@ void RenderMenuDone(MenuDoneError err) {
     if (error) {
         OSScreenPutFontEx(SCREEN_DRC, 0, 17, "HOME: Quit");
     } else {
-        OSScreenPutFontEx(SCREEN_DRC, 0, 17, "A: Shut Down");
+        OSScreenPutFontEx(SCREEN_DRC, 0, 17, "A: Reboot");
     }
 }

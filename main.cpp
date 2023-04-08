@@ -31,9 +31,11 @@
 
 #include <romfs-wiiu.h>
 
+#define REBOOT_TID 0xFFFFFFFFFFFFFFFEllu
+
 extern "C" {
     //remove when wut adds it
-    void OSShutdown();
+    void OSLaunchTitlel(uint64_t titleId, int argc, ...);
     void FSAInit();
     int FSAAddClient(void* asyncAttachData);
     int FSAFlushVolume(int handle, const char* path);
@@ -407,9 +409,9 @@ int main(int argc, char** argv) {
         PresentMenu();
     }
 
-    printf("shutting down\n");
+    printf("rebooting\n");
 
-    OSShutdown();
+    OSLaunchTitlel(REBOOT_TID, 0);
     while (WHBProcIsRunning()) {}
 
     return 0;
@@ -545,9 +547,9 @@ else {
         PresentMenu();
     }
 
-        printf("shutting down\n");
+        printf("rebooting\n");
 
-        OSShutdown();
+        OSLaunchTitlel(REBOOT_TID, 0);
         while (WHBProcIsRunning()) {}
 
        return 0;
