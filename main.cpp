@@ -438,7 +438,7 @@ else {
      if (hash2.patch != CERT_PATCH_STATE_STOCK || hash2.id != CERT_ID_THWATE_PREMIUM_SERVER) {
         //No Backup for NSSL or corrupt
     printf("Failed - No Backup Exists (NSSL cert)\n");
-            while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_NO_BACKUP); PresentMenu(); }
+            while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_NO_CERT_BACKUP); PresentMenu(); }
             return -1;
     }
 
@@ -462,13 +462,17 @@ else {
 
     bret = backup_cert(B_RESTORE_BACKUP, cert_path, cert_bak_path);
     if (!bret) {
+        // ashquarky: better to leave it alone and let the Verify step catch it
+        // it might have copied succesfully or done nothing, so verify will check the hash
+        // the only time this fix is needed is in case of a partial copy
+        printf("Failed to restore NSSL cert - bricky bricky!\n");
         //SHIT, QUICK ATTEMPT TO FIX
-        bret = fast_copy_file(cert_bak_path, cert_path);
-            if (!bret) {
-                printf("Reverting nssl patches failed!\n");
-                while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_PATCH_FAIL_CERT_BRICK); PresentMenu(); }
-                return -1;
-            }
+//        bret = fast_copy_file(cert_bak_path, cert_path);
+//            if (!bret) {
+//                printf("Reverting nssl patches failed!\n");
+//                while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_PATCH_FAIL_CERT_BRICK); PresentMenu(); }
+//                return -1;
+//            }
     }
  RenderMenuLoading(task_percent(task++,7), "Verifying final patches... (wave.rpx)");
     PresentMenu();
@@ -476,9 +480,13 @@ else {
     {
         std::ifstream is(wave_path, std::ios::binary);
         auto hash = rpx_hash(is);
-        if (hash.patch != RPX_PATCH_STATE_STOCK) {
-            printf("Failed to commit patches - It may be Corrupted\n");
+        if (hash.patch == RPX_PATCH_STATE_PRETENDO) {
+            printf("Failed to commit patches - Pretendo still in place\n");
             while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_RESTORE_FAIL); PresentMenu(); }
+            return -1;
+        } else if (hash.patch != RPX_PATCH_STATE_STOCK) {
+            printf("Failed to commit patches - It may be Corrupted\n");
+            while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_PATCH_FAIL_DANGEROUS); PresentMenu(); }
             return -1;
         }
     }
@@ -491,7 +499,7 @@ else {
         if (hash.patch != RPX_PATCH_STATE_STOCK) {
             //Just checking if it is not damaged
             printf("Failed to commit patches - nn_olv corrupt!\n");
-            while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_RESTORE_FAIL); PresentMenu(); }
+            while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_PATCH_FAIL_DANGEROUS); PresentMenu(); }
             return -1;
         }
     }
@@ -524,7 +532,9 @@ else {
                 return -1;
             }
 
-            while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_PATCH_FAIL_DANGEROUS); PresentMenu(); }
+            // if we got here, the cert is now the correct one
+            // still, some weird shit went down, so throw a soft error (not PATCH_FAIL_DANGEROUS though)
+            while (WHBProcIsRunning()) { RenderMenuDone(MENU_DONE_RESTORE_FAIL); PresentMenu(); }
             return -1;
         }
         
